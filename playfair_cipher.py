@@ -73,11 +73,6 @@ def playfair_cipher_encode():
             which_encode(current_pair)
 
 
-
-
-
-
-
 if __name__ == '__main__':
     process_inputs()
     playfair_cipher_encode()
