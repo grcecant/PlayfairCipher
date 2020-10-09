@@ -35,15 +35,19 @@ def which_encode(letter_pair):
     print()
 
 def vertical_encode(letter_pair):
-    #
+    #encode:
+    #if letters are on the same row, use the letters below them to replace
     print()
 
 def horizontal_encode(letter_pair):
-    #
+    #encode:
+    #if letters are on the same column, use the letters to their right to replace them
     print()
 
 def regular_encode(letter_pair):
-    #
+    #encode:
+    #if the letters are different, replace them with the letters on the same row, but in the column of the other letter
+
     print()
 
 #the meaty encode function!
@@ -64,13 +68,13 @@ def playfair_cipher_encode():
         if first == second:
             insert_x(current_pair)
 
-        #if letters are on the same row, use the letters below them to replace
+        #if not on the same row, determine which function to use
+        else:
+            which_encode(current_pair)
 
 
-        #if letters are on the same column, use the letters to their right to replace them
 
 
-        #if the letters are different, replace them with the letters on the same row, but in the column of the other letter
 
 
 
