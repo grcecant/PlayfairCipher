@@ -31,8 +31,15 @@ def insert_x(letter_pair):
         text.insert("X", i+1)
 
 def which_encode(letter_pair):
-    #
-    print()
+    global first_row, first_col, second_row, second_col
+    for i in key:
+        if first in i:
+            first_row = i
+            first_col = i.index(first)
+        if second in i:
+            second_row = i
+            second_col = i.index(second)
+
 
 def vertical_encode(letter_pair):
     #encode:
@@ -55,14 +62,11 @@ def playfair_cipher_encode():
     #iterate through in pairs
     for i in range(len(text)-1):
         current_pair = [text[i], text[i+1]]
+        global first, second
         first = current_pair[0]
         second = current_pair[1]
 
         print(current_pair)
-        for i in key:
-            if first in i:
-
-        print(key.index(first))
 
         #if letters are the same, insert an x between them
         if first == second:
@@ -73,7 +77,7 @@ def playfair_cipher_encode():
             which_encode(current_pair)
 
 
-            
+
 if __name__ == '__main__':
     process_inputs()
     playfair_cipher_encode()
