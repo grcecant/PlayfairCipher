@@ -39,6 +39,15 @@ def which_encode(letter_pair):
         if second in i:
             second_row = i
             second_col = i.index(second)
+    #if on the same row, use vertical_encode
+    if first_row == second_row:
+        vertical_encode(letter_pair)
+    #if same column, use horizontal_encode
+    elif first_col == second_col:
+        horizontal_encode(letter_pair)
+    #if different, use regular encode
+    else:
+        regular_encode(letter_pair)
 
 
 def vertical_encode(letter_pair):
