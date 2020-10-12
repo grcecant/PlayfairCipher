@@ -6,6 +6,7 @@
 import sys
 
 #functions
+
 def process_inputs():
     if len(sys.argv) < 4:
         sys.exit()
@@ -28,7 +29,7 @@ def process_inputs():
 
 def insert_x(letter_pair):
     if first == second:
-        encoded_text += "X"
+        encoded += "X"
         text.insert(second, i+1)
 
 
@@ -36,11 +37,13 @@ def which_encode(letter_pair):
     global first_row, first_col, second_row, second_col
     for i in key:
         if first in i:
-            first_row = i
+            first_row = key.index(i)
             first_col = i.index(first)
         if second in i:
-            second_row = i
+            second_row = key.index(i)
             second_col = i.index(second)
+    print (first_row)
+    print(second_row)
     #if on the same row, use vertical_encode
     if first_row == second_row:
         vertical_encode(letter_pair)
@@ -58,8 +61,10 @@ def vertical_encode(letter_pair):
     new_first_row = (first_row + 1) % 5
     new_second_row = (second_row + 1) % 5
     #add key-retrieved letters to the final encoded string
-    encoded_text += key[new_first_row][first_col]
-    encoded_text += key[new_second_row][second_col]
+    global encoded
+    encoded += key[new_first_row][first_col]
+    encoded += key[new_second_row][second_col]
+    print("vertical encode")
 
 def horizontal_encode(letter_pair):
     #encode:
@@ -67,8 +72,10 @@ def horizontal_encode(letter_pair):
     new_first_col = (first_col + 1) % 5
     new_second_col = (second_col + 1) % 5
     #add key-retrieved letters to the final encoded string
-    encoded_text += key[first_row][new_first_col]
-    encoded_text += key[second_row][new_second_col]
+    global encoded
+    encoded += key[first_row][new_first_col]
+    encoded += key[second_row][new_second_col]
+    print("horizontal encode")
 
 def regular_encode(letter_pair):
     #encode:
@@ -77,6 +84,9 @@ def regular_encode(letter_pair):
 
 #the meaty encode function!
 def playfair_cipher_encode():
+    global encoded;
+    encoded = ""
+
     #iterate through in pairs
     for i in range(len(text)-1):
         current_pair = [text[i], text[i+1]]
@@ -94,13 +104,9 @@ def playfair_cipher_encode():
         else:
             which_encode(current_pair)
 
-
-
 if __name__ == '__main__':
-    #global encoded_text
-    encoded_text = ""
     process_inputs()
     playfair_cipher_encode()
     #if mode == "encode":
         #playfair_cipher_encode()
-    print(encoded_text)
+    print(encoded)
