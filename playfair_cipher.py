@@ -28,7 +28,9 @@ def process_inputs():
 
 def insert_x(letter_pair):
     if first == second:
-        text.insert("X", i+1)
+        encoded_text += "X"
+        text.insert(second, i+1)
+
 
 def which_encode(letter_pair):
     global first_row, first_col, second_row, second_col
@@ -53,18 +55,25 @@ def which_encode(letter_pair):
 def vertical_encode(letter_pair):
     #encode:
     #if letters are on the same row, use the letters below them to replace
-    print()
+    new_first_row = (first_row + 1) % 5
+    new_second_row = (second_row + 1) % 5
+    #add key-retrieved letters to the final encoded string
+    encoded_text += key[new_first_row][first_col]
+    encoded_text += key[new_second_row][second_col]
 
 def horizontal_encode(letter_pair):
     #encode:
     #if letters are on the same column, use the letters to their right to replace them
-    print()
+    new_first_col = (first_col + 1) % 5
+    new_second_col = (second_col + 1) % 5
+    #add key-retrieved letters to the final encoded string
+    encoded_text += key[first_row][new_first_col]
+    encoded_text += key[second_row][new_second_col]
 
 def regular_encode(letter_pair):
     #encode:
     #if the letters are different, replace them with the letters on the same row, but in the column of the other letter
-
-    print()
+    print("reg encode")
 
 #the meaty encode function!
 def playfair_cipher_encode():
@@ -88,7 +97,10 @@ def playfair_cipher_encode():
 
 
 if __name__ == '__main__':
+    #global encoded_text
+    encoded_text = ""
     process_inputs()
     playfair_cipher_encode()
     #if mode == "encode":
         #playfair_cipher_encode()
+    print(encoded_text)
