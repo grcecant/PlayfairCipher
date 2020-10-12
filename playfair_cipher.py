@@ -5,7 +5,7 @@
 #imports
 import sys
 
-#functions
+#general functions
 
 def process_inputs():
     if len(sys.argv) < 4:
@@ -27,7 +27,7 @@ def process_inputs():
         key.append(temp)
 
     #print the key as a square
-    print("The key is: ")
+    print("\nThe key is: ")
     for i in key:
         print(i)
     print('\n')
@@ -44,6 +44,9 @@ def insert_x(letter_pair, index):
     #reassign the value, because strings are immutable
     text = new_text
 
+#-----------------
+#ENCODE FUNCTIONS
+#-----------------
 
 def which_encode(letter_pair):
     global first_row, first_col, second_row, second_col
@@ -80,7 +83,6 @@ def vertical_encode(letter_pair):
     encoded += key[new_first_row][first_col]
     encoded += key[new_second_row][second_col]
 
-    print("vertical encode")
 
 def horizontal_encode(letter_pair):
     #encode:
@@ -95,7 +97,6 @@ def horizontal_encode(letter_pair):
     encoded += key[first_row][new_first_col]
     encoded += key[second_row][new_second_col]
 
-    print("horizontal encode")
 
 def regular_encode(letter_pair):
     #encode:
@@ -112,8 +113,6 @@ def regular_encode(letter_pair):
     global encoded
     encoded += key[first_row][first_col]
     encoded += key[second_row][second_col]
-
-    print("reg encode")
 
 
 #the meaty encode function!
@@ -132,8 +131,6 @@ def playfair_cipher_encode():
             first = current_pair[0]
             second = current_pair[1]
 
-            print(current_pair)
-
             #if letters are the same, insert an x between them
             if first == second:
                 insert_x(current_pair, current)
@@ -145,9 +142,107 @@ def playfair_cipher_encode():
             which_encode(current_pair)
         current+=1
 
+#-----------------
+#DECODE FUNCTIONS
+#-----------------
+
+def which_decode(letter_pair):
+    global first_row, first_col, second_row, second_col
+    for i in key:
+        if first in i:
+            first_row = key.index(i)
+            first_col = i.index(first)
+        if second in i:
+            second_row = key.index(i)
+            second_col = i.index(second)
+
+    #if on the same row, use vertical_encode
+    if first_row == second_row:
+        vertical_decode(letter_pair)
+    #if same column, use horizontal_encode
+    elif first_col == second_col:
+        horizontal_decode(letter_pair)
+    #if different, use regular encode
+    else:
+        regular_decode(letter_pair)
+
+
+def vertical_decode(letter_pair):
+    #decode:
+    #if letters are on the same row, use the letters above them to replace
+
+    #new row = one row above
+    new_first_row = (first_row - 1) % 5
+    new_second_row = (second_row - 1) % 5
+
+    #add key-retrieved letters to the final encoded string
+    global decoded
+    decoded += key[new_first_row][first_col]
+    decoded += key[new_second_row][second_col]
+
+
+def horizontal_decode(letter_pair):
+    #decode:
+    #if letters are on the same column, use the letters to their left to replace them
+
+    #new column = one column to the right
+    new_first_col = (first_col - 1) % 5
+    new_second_col = (second_col - 1) % 5
+
+    #add key-retrieved letters to the final encoded string
+    global decoded
+    decoded += key[first_row][new_first_col]
+    decoded += key[second_row][new_second_col]
+
+
+def regular_decode(letter_pair):
+    #decode:
+    #if the letters are different, replace them with the letters on the same row, but in the column of the other letter
+    global first_col, second_col
+    #copy the first col value
+    copy_first_col = first_col
+
+    #swap the rows and columns
+    first_col = second_col
+    second_col = copy_first_col
+
+    #add key-retrieved letters to final decoded string
+    global decoded
+    decoded += key[first_row][first_col]
+    decoded += key[second_row][second_col]
+
+#the meaty decode function!
+def playfair_cipher_decode():
+
+    global decoded;
+    decoded = ""
+    current = 0
+    end_of_text = len(text) - 1
+
+    #iterate through in pairs
+    while current < end_of_text:
+        if current%2 == 0:
+            current_pair = [text[current], text[current+1]]
+            global first, second
+            first = current_pair[0]
+            second = current_pair[1]
+
+            #if letters are the same, insert an x between them
+            if first == second:
+                insert_x(current_pair, current)
+                current_pair = [text[current], 'X']
+                second = current_pair[1]
+                end_of_text +=1
+
+            #determine which function to use
+            which_decode(current_pair)
+        current+=1
 
 if __name__ == '__main__':
     process_inputs()
-    if mode == "encode":
+    if mode == 'encode':
         playfair_cipher_encode()
-    print(encoded)
+        print('Your encoded string is: \"' + encoded + '\"')
+    else:
+        playfair_cipher_decode()
+        print('Your decoded string is: \"' + decoded + '\"')
