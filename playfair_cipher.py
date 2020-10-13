@@ -57,8 +57,6 @@ def which_encode(letter_pair):
         if second in i:
             second_row = key.index(i)
             second_col = i.index(second)
-    print (first_row)
-    print(second_row)
     #if on the same row, use vertical_encode
     if first_row == second_row:
         vertical_encode(letter_pair)
