@@ -13,8 +13,9 @@ def process_inputs():
 
     #args from command line
     global mode, text, key
+    text = ""
     mode = sys.argv[1]
-    text = sys.argv[2].upper()
+    inp_text = sys.argv[2].upper()
     input_key = sys.argv[3]
     key = []
 
@@ -33,14 +34,31 @@ def process_inputs():
     print('\n')
 
     #change all Js to Is
-    for i in text:
+    for i in inp_text:
         if i == "J":
-            i = "I"
+            text += "I"
+        else:
+            text += i
+    print(text)
+
+def insert_x_total(input_text):
+    global encoded, text
+    new_text = input_text
+    current = 0
+    end_of_range = len(input_text) - 1
+    while current < end_of_range:
+        if current % 2 == 0:
+            if new_text[current] == new_text[current+1]:
+                new_text = new_text[:current+1] + "X" + new_text[current+1:]
+            end_of_range = len(new_text) - 1
+        current+=1
+    print(new_text)
+    text = new_text
 
 def insert_x(letter_pair, index):
     global encoded, text
     #shift the second letter of the pair down one
-    new_text = text[:index] + second + text[index:]
+    new_text = text[:index+1] + "X" + text[index+1:]
     #reassign the value, because strings are immutable
     text = new_text
 
@@ -49,6 +67,7 @@ def insert_x(letter_pair, index):
 #-----------------
 
 def which_encode(letter_pair):
+    print(letter_pair)
     global first_row, first_col, second_row, second_col
     for i in key:
         if first in i:
@@ -119,6 +138,12 @@ def playfair_cipher_encode():
     global encoded;
     encoded = ""
     current = 0
+
+    #if length of text is odd, add a "Z" at the end
+    global text
+    if len(text) % 2 == 1:
+        text+="Z"
+    print(text)
     end_of_text = len(text) - 1
 
     #iterate through in pairs
@@ -129,16 +154,22 @@ def playfair_cipher_encode():
             first = current_pair[0]
             second = current_pair[1]
 
-            #if letters are the same, insert an x between them
+            '''#if letters are the same, insert an x between them
             if first == second:
                 insert_x(current_pair, current)
                 current_pair = [text[current], 'X']
                 second = current_pair[1]
                 end_of_text +=1
+                print(text)'''
 
             #determine which function to use
             which_encode(current_pair)
         current+=1
+    '''if (end_of_text+1) % 2 == 1:
+        current_pair = [text[current], "Z"]
+        first = current_pair[0]
+        second = current_pair[1]
+        which_encode(current_pair)'''
 
 #-----------------
 #DECODE FUNCTIONS
@@ -219,18 +250,19 @@ def playfair_cipher_decode():
 
     #iterate through in pairs
     while current < end_of_text:
+        #print(current)
         if current%2 == 0:
             current_pair = [text[current], text[current+1]]
             global first, second
             first = current_pair[0]
             second = current_pair[1]
 
-            #if letters are the same, insert an x between them
+            '''#if letters are the same, insert an x between them
             if first == second:
                 insert_x(current_pair, current)
                 current_pair = [text[current], 'X']
                 second = current_pair[1]
-                end_of_text +=1
+                end_of_text +=1'''
 
             #determine which function to use
             which_decode(current_pair)
@@ -238,6 +270,7 @@ def playfair_cipher_decode():
 
 if __name__ == '__main__':
     process_inputs()
+    insert_x_total(text)
     if mode == 'encode':
         playfair_cipher_encode()
         print('Your encoded string is: \"' + encoded + '\"')
