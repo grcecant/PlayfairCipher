@@ -154,22 +154,9 @@ def playfair_cipher_encode():
             first = current_pair[0]
             second = current_pair[1]
 
-            '''#if letters are the same, insert an x between them
-            if first == second:
-                insert_x(current_pair, current)
-                current_pair = [text[current], 'X']
-                second = current_pair[1]
-                end_of_text +=1
-                print(text)'''
-
             #determine which function to use
             which_encode(current_pair)
         current+=1
-    '''if (end_of_text+1) % 2 == 1:
-        current_pair = [text[current], "Z"]
-        first = current_pair[0]
-        second = current_pair[1]
-        which_encode(current_pair)'''
 
 #-----------------
 #DECODE FUNCTIONS
@@ -256,13 +243,6 @@ def playfair_cipher_decode():
             global first, second
             first = current_pair[0]
             second = current_pair[1]
-
-            '''#if letters are the same, insert an x between them
-            if first == second:
-                insert_x(current_pair, current)
-                current_pair = [text[current], 'X']
-                second = current_pair[1]
-                end_of_text +=1'''
 
             #determine which function to use
             which_decode(current_pair)
